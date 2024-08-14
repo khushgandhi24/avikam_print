@@ -25,5 +25,6 @@ ThemeData primaryTheme = ThemeData(
           borderRadius: BorderRadius.circular(24),
           borderSide: BorderSide(color: AppColors.secondaryColor, width: 4)),
       focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(24),
           borderSide: BorderSide(color: AppColors.secondaryColor, width: 4)),
     ));

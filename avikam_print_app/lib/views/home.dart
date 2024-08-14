@@ -1,9 +1,20 @@
 import 'package:avikam_print_app/widgets/barcode_scan.dart';
 import 'package:avikam_print_app/widgets/label_preview.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+
+  void checkPermissions() async {
+    bool hasBluetoothPermission = await Permission.bluetooth.isGranted;
+    if (hasBluetoothPermission) {
+      debugPrint("Has Permission");
+    } else {
+      await Permission.bluetooth.request();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +26,7 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: Icon(Icons.camera_alt_outlined),
+        child: const Icon(Icons.camera_alt_outlined),
       ),
       body: Center(
         child: Padding(
@@ -24,11 +35,11 @@ class HomePage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                BarcodeScanner(),
+                const BarcodeScanner(),
                 SizedBox(
                   height: MediaQuery.sizeOf(context).height * 0.2,
                 ),
-                LabelPreview(),
+                const LabelPreview(),
               ],
             ),
           ),
