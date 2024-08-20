@@ -10,20 +10,22 @@ class AppColors {
 }
 
 ThemeData primaryTheme = ThemeData(
-    useMaterial3: true,
-    //Seed Color
-    colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
-    scaffoldBackgroundColor: AppColors.surfaceColor,
-    appBarTheme: AppBarTheme(
-        centerTitle: true,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
-        backgroundColor: AppColors.primaryColor,
-        titleTextStyle: TextStyle(color: AppColors.surfaceColor, fontSize: 22)),
-    inputDecorationTheme: InputDecorationTheme(
-      border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(24),
-          borderSide: BorderSide(color: AppColors.secondaryColor, width: 4)),
-      focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: AppColors.secondaryColor, width: 4)),
-    ));
+  useMaterial3: true,
+  //Seed Color
+  colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
+  scaffoldBackgroundColor: AppColors.surfaceColor,
+  appBarTheme: AppBarTheme(
+      centerTitle: true,
+      elevation: 0,
+      surfaceTintColor: Colors.transparent,
+      backgroundColor: AppColors.primaryColor,
+      titleTextStyle: TextStyle(color: AppColors.surfaceColor, fontSize: 22)),
+  inputDecorationTheme: InputDecorationTheme(
+    border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(24),
+        borderSide: BorderSide(color: AppColors.secondaryColor, width: 4)),
+    focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(24),
+        borderSide: BorderSide(color: AppColors.secondaryColor, width: 4)),
+  ),
+);

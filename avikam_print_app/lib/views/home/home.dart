@@ -1,5 +1,5 @@
 import 'package:avikam_print_app/widgets/barcode_scan.dart';
-import 'package:avikam_print_app/widgets/label_preview.dart';
+// import 'package:avikam_print_app/widgets/label_preview.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -13,22 +13,22 @@ class HomePage extends StatelessWidget {
         title: const Text("Avikam Label Print App"),
         toolbarHeight: MediaQuery.sizeOf(context).height * 0.09,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.camera_alt_outlined),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {},
+      //   child: const Icon(Icons.camera_alt_outlined),
+      // ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                BarcodeScanner(),
-                SizedBox(
-                  height: MediaQuery.sizeOf(context).height * 0.2,
+                const Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: BarcodeScanner(),
                 ),
-                LabelPreview(),
+                SizedBox(height: MediaQuery.sizeOf(context).height * 0.25),
+                // const LabelPreview(),
               ],
             ),
           ),
