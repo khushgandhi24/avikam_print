@@ -5,6 +5,15 @@ import 'package:flutter/material.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  void checkPermissions() async {
+    bool hasBluetoothPermission = await Permission.bluetooth.isGranted;
+    if (hasBluetoothPermission) {
+      debugPrint("Has Permission");
+    } else {
+      await Permission.bluetooth.request();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
