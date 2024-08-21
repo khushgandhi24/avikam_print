@@ -14,7 +14,6 @@ class _BarcodeScannerState extends State<BarcodeScanner> {
 
   @override
   void initState() {
-    debugPrint(Provider.of<ApiService>(context, listen: false).token);
     super.initState();
   }
 
@@ -29,9 +28,12 @@ class _BarcodeScannerState extends State<BarcodeScanner> {
             autofocus: true,
             // showCursor: false,
             onChanged: (value) {
-              // Provider.of<ApiService>(context, listen: false).setAWB(value);
+              Provider.of<ApiService>(context, listen: false).setAWB(value);
+              debugPrint("AWB No.: $value");
               Provider.of<ApiService>(context, listen: false)
-                  .getBase64(value.trim());
+                  .getBase64(value.trim(), context);
+              barcodeController.clear();
+              debugPrint("AWB No.: $value");
             },
             decoration: const InputDecoration(
                 labelText: "Barcode No.",
@@ -39,13 +41,13 @@ class _BarcodeScannerState extends State<BarcodeScanner> {
             controller: barcodeController,
           ),
         ),
-        Expanded(
-          child: IconButton(
-              onPressed: () {
-                barcodeController.text = "";
-              },
-              icon: const Icon(Icons.close_rounded)),
-        )
+        // Expanded(
+        //   child: IconButton(
+        //       onPressed: () {
+        //         barcodeController.text = "";
+        //       },
+        //       icon: const Icon(Icons.close_rounded)),
+        // )
       ],
     );
   }

@@ -19,7 +19,7 @@ ThemeData primaryTheme = ThemeData(
       elevation: 0,
       surfaceTintColor: Colors.transparent,
       backgroundColor: AppColors.primaryColor,
-      titleTextStyle: TextStyle(color: AppColors.surfaceColor, fontSize: 22)),
+      titleTextStyle: const TextStyle(fontSize: 22)),
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(24),

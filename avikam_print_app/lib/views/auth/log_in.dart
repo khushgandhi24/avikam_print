@@ -24,6 +24,9 @@ class _LogInState extends State<LogIn> {
     String userID = userIDController.text.trim();
     String pass = passController.text.trim();
 
+    debugPrint("User ID: $userID");
+    debugPrint("Pass: $pass");
+
     try {
       final res = await Dio()
           .post('http://office11.busisoft.in/api/v1/LoginAPI/Login', data: {
@@ -31,22 +34,23 @@ class _LogInState extends State<LogIn> {
         "Password": pass,
         "ApplicationType": "C",
       });
-      // debugPrint(res.data.toString());
       Login user = Login.fromJson(res.data);
       if (user.response.token.isNotEmpty) {
         if (!context.mounted) return;
         Provider.of<ApiService>(context, listen: false)
             .setToken(user.response.token);
-        Provider.of<ApiService>(context, listen: false)
-            .setToken(user.response.token);
+        Provider.of<ApiService>(context, listen: false).setUserID(userID);
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (BuildContext context) => const HomePage()));
+        userIDController.clear();
+        passController.clear();
       }
     } catch (e) {
       debugPrint('Error: $e');
       if (!context.mounted) return;
+      Provider.of<ApiService>(context).resetAll();
       showDialog(
           context: context,
           builder: (ctx) {

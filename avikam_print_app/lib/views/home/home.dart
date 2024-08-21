@@ -1,6 +1,9 @@
+import 'package:avikam_print_app/service/api_service.dart';
+import 'package:avikam_print_app/theme.dart';
 import 'package:avikam_print_app/widgets/barcode_scan.dart';
 // import 'package:avikam_print_app/widgets/label_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -19,8 +22,20 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        title: const Text("Avikam Label Print App"),
+        title: Text(
+          "Label Print",
+          style: TextStyle(color: AppColors.tertiaryColor),
+        ),
         toolbarHeight: MediaQuery.sizeOf(context).height * 0.09,
+        leading: IconButton(
+            onPressed: () {
+              Provider.of<ApiService>(context, listen: false).resetAll();
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.logout_rounded,
+              color: AppColors.surfaceColor,
+            )),
       ),
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {},
