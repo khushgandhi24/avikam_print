@@ -28,12 +28,13 @@ class _LogInState extends State<LogIn> {
     debugPrint("Pass: $pass");
 
     try {
-      final res = await Dio()
-          .post('http://office11.busisoft.in/api/v1/LoginAPI/Login', data: {
-        "UserID": userID,
-        "Password": pass,
-        "ApplicationType": "C",
-      });
+      final res = await Dio().post(
+          'https://xpresion.gpsupplychain.com/api/v1/LoginAPI/Login',
+          data: {
+            "UserID": userID,
+            "Password": pass,
+            "ApplicationType": "C",
+          });
       Login user = Login.fromJson(res.data);
       if (user.response.token.isNotEmpty) {
         if (!context.mounted) return;
@@ -49,25 +50,25 @@ class _LogInState extends State<LogIn> {
       }
     } catch (e) {
       debugPrint('Error: $e');
-      if (!context.mounted) return;
-      Provider.of<ApiService>(context).resetAll();
-      showDialog(
-          context: context,
-          builder: (ctx) {
-            return AlertDialog(
-              title: const Text('Invalid login credentials'),
-              content: const Text('Please try again'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(ctx);
-                  },
-                  child: const Text('Close'),
-                ),
-              ],
-              actionsAlignment: MainAxisAlignment.center,
-            );
-          });
+      // if (!context.mounted) return;
+      // Provider.of<ApiService>(context, listen: false).resetAll();
+      // showDialog(
+      //     context: context,
+      //     builder: (ctx) {
+      //       return AlertDialog(
+      //         title: const Text('Invalid login credentials'),
+      //         content: const Text('Please try again'),
+      //         actions: [
+      //           TextButton(
+      //             onPressed: () {
+      //               Navigator.pop(ctx);
+      //             },
+      //             child: const Text('Close'),
+      //           ),
+      //         ],
+      //         actionsAlignment: MainAxisAlignment.center,
+      //       );
+      //     });
     }
   }
 

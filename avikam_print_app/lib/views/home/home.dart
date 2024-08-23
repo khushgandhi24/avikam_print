@@ -1,4 +1,5 @@
 import 'package:avikam_print_app/service/api_service.dart';
+import 'package:avikam_print_app/service/print_scan.dart';
 import 'package:avikam_print_app/theme.dart';
 import 'package:avikam_print_app/widgets/barcode_scan.dart';
 // import 'package:avikam_print_app/widgets/label_preview.dart';
@@ -53,6 +54,14 @@ class HomePage extends StatelessWidget {
                 ),
                 SizedBox(height: MediaQuery.sizeOf(context).height * 0.25),
                 // const LabelPreview(),
+                TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const BlePrint()));
+                    },
+                    child: const Text("Check Bluetooth"))
               ],
             ),
           ),

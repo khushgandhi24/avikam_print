@@ -1,15 +1,25 @@
 // import 'package:avikam_print_app/views/auth/log_in.dart';
+// import 'dart:typed_data';
+import 'package:bluetooth_print_plus/bluetooth_print_plus.dart';
+import 'package:bluetooth_print_plus/tsp_command.dart';
+// import 'package:bluetooth_print_plus/bluetooth_print_model.dart';
 import 'package:avikam_print_app/views/home/scan_model.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'dart:convert';
-import 'package:open_filex/open_filex.dart';
+// import 'package:open_filex/open_filex.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
+// import 'package:pdf/widgets.dart';
+// import 'package:pdfx/pdfx.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:printing/printing.dart';
+// import 'package:printing/printing.dart';
+import 'package:pdf_image_renderer/pdf_image_renderer.dart';
 
 class ApiService extends ChangeNotifier {
+  final _bluetoothPrintPlus = BluetoothPrintPlus.instance;
+
   void setToken(String val) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('token', val);
@@ -41,14 +51,15 @@ class ApiService extends ChangeNotifier {
     debugPrint("Call Start");
 
     try {
-      final res = await Dio()
-          .post('http://office11.busisoft.in//api/v1/Awbentry/PrintPDF', data: {
-        "AWBNO": awb,
-        "Type": "ms",
-        "UserID": userid,
-        "Token": token,
-        "FromWhere": "Mobile",
-      });
+      final res = await Dio().post(
+          'https://xpresion.gpsupplychain.com/api/v1/Awbentry/PrintPDF',
+          data: {
+            "AWBNO": awb,
+            "Type": "ms",
+            "UserID": userid,
+            "Token": token,
+            "FromWhere": "Mobile",
+          });
       // if (res.data is Map<String, dynamic>) {
       //   ScanResponse scres = ScanResponse.fromJson(res.data);
       //   // debugPrint(scres.response); // This will print the base64 string
@@ -60,8 +71,8 @@ class ApiService extends ChangeNotifier {
       // setbase64(scres.response);
       // debugPrint(scres.response);
       if (!context.mounted) return;
-      Printer? pri = await Printing.pickPrinter(context: context);
-      debugPrint(pri.toString());
+      // Printer? pri = await Printing.pickPrinter(context: context);
+      // debugPrint(pri.toString());
       base64ToPdf(scres.response, "test");
       prefs.setString('awbno', '');
     } catch (e) {
@@ -107,10 +118,39 @@ class ApiService extends ChangeNotifier {
     final output = await getTemporaryDirectory();
     final file = File("${output.path}/$fileName.pdf");
     await file.writeAsBytes(bytes.buffer.asUint8List());
-    // await Printing.layoutPdf(onLayout: (_) => bytes.buffer.asUint8List());
-    await Printing.directPrintPdf(
-        printer: const Printer(url: "3R20P-C8E2"),
-        onLayout: (format) => bytes.buffer.asUint8List());
+
+    final pdf = PdfImageRendererPdf(path: "${output.path}/$fileName.pdf");
+    await pdf.open();
+    await pdf.openPage(pageIndex: 0);
+    final size = await pdf.getPageSize(pageIndex: 0);
+    final img = await pdf.renderPage(
+      pageIndex: 0,
+      x: 0,
+      y: 0,
+      width: size.width, // you can pass a custom size here to crop the image
+      height: size.height, // you can pass a custom size here to crop the image
+      scale: 1, // increase the scale for better quality (e.g. for zooming)
+      background: Colors.white,
+    );
+    await pdf.closePage(pageIndex: 0);
+    pdf.close();
+    // final document = await PdfDocument.openFile("${output.path}/$fileName.pdf");
+    // PdfPage page = await document.getPage(1);
+    // PdfPageImage? pageImage = await page.render(width: 80, height: 40);
+    // final ByteData bytese = await rootBundle.load("assets/logo.png");
+    final Uint8List image = img!; //bytese.buffer.asUint8List();
+    // final Uint8List image = pageImage!.bytes;
+    final tscCommand = TscCommand();
+    await tscCommand.cleanCommand();
+    await tscCommand.cls();
+    await tscCommand.size(width: 80, height: 35);
+    await tscCommand.image(image: image, x: 50, y: 60);
+    await tscCommand.print(1);
+    final cmd = await tscCommand.getCommand();
+    if (cmd == null) return;
+    BluetoothPrintPlus.instance.write(cmd);
     // await OpenFilex.open("${output.path}/$fileName.pdf");
   }
+
+  // Future<void> printPDF(Uint8List bytes) async {}
 }
