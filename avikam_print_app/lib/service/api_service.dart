@@ -16,9 +16,15 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:printing/printing.dart';
 import 'package:pdf_image_renderer/pdf_image_renderer.dart';
+// import 'package:pdf_render/pdf_render.dart';
 
 class ApiService extends ChangeNotifier {
   final _bluetoothPrintPlus = BluetoothPrintPlus.instance;
+  Uint8List? imaeg;
+
+  void setImaeg(Uint8List data) {
+    imaeg = data;
+  }
 
   void setToken(String val) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -126,10 +132,12 @@ class ApiService extends ChangeNotifier {
     final img = await pdf.renderPage(
       pageIndex: 0,
       x: 0,
-      y: 0,
-      width: size.width, // you can pass a custom size here to crop the image
-      height: size.height, // you can pass a custom size here to crop the image
-      scale: 1, // increase the scale for better quality (e.g. for zooming)
+      y: 15,
+      width: size.width ~/
+          1.5, // you can pass a custom size here to crop the image
+      height:
+          size.height ~/ 3, // you can pass a custom size here to crop the image
+      scale: 2.7, // increase the scale for better quality (e.g. for zooming)
       background: Colors.white,
     );
     await pdf.closePage(pageIndex: 0);
@@ -139,17 +147,20 @@ class ApiService extends ChangeNotifier {
     // PdfPageImage? pageImage = await page.render(width: 80, height: 40);
     // final ByteData bytese = await rootBundle.load("assets/logo.png");
     final Uint8List image = img!; //bytese.buffer.asUint8List();
-    // final Uint8List image = pageImage!.bytes;
+    // setImaeg(image);
+    // notifyListeners();
+
     final tscCommand = TscCommand();
     await tscCommand.cleanCommand();
     await tscCommand.cls();
-    await tscCommand.size(width: 80, height: 35);
-    await tscCommand.image(image: image, x: 50, y: 60);
+    await tscCommand.density(10);
+    await tscCommand.size(width: 1000, height: 900);
+    await tscCommand.image(image: image, x: 0, y: 0);
+    await tscCommand.text(content: "0,0", x: 0, y: 0);
     await tscCommand.print(1);
     final cmd = await tscCommand.getCommand();
     if (cmd == null) return;
     BluetoothPrintPlus.instance.write(cmd);
-    // await OpenFilex.open("${output.path}/$fileName.pdf");
   }
 
   // Future<void> printPDF(Uint8List bytes) async {}

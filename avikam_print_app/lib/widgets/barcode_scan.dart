@@ -1,6 +1,7 @@
 import 'package:avikam_print_app/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// import 'dart:typed_data';
 
 class BarcodeScanner extends StatefulWidget {
   const BarcodeScanner({super.key});
