@@ -1,6 +1,7 @@
 import 'package:avikam_print_app/service/api_service.dart';
 import 'package:avikam_print_app/service/print_scan.dart';
 import 'package:avikam_print_app/theme.dart';
+import 'package:avikam_print_app/views/auth/log_in.dart';
 // import 'package:avikam_print_app/views/home/image_view.dart';
 import 'package:avikam_print_app/widgets/barcode_scan.dart';
 // import 'package:avikam_print_app/widgets/label_preview.dart';
@@ -32,7 +33,8 @@ class HomePage extends StatelessWidget {
         leading: IconButton(
             onPressed: () {
               Provider.of<ApiService>(context, listen: false).resetAll();
-              Navigator.pop(context);
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const LogIn()));
             },
             icon: Icon(
               Icons.logout_rounded,
@@ -62,7 +64,11 @@ class HomePage extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => const BlePrint()));
                     },
-                    child: const Text("Check Bluetooth")),
+                    child: const Text(
+                      "Connect to Bluetooth Printer",
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    )),
                 // SizedBox(height: MediaQuery.sizeOf(context).height * 0.25),
                 // const ImageView(),
               ],

@@ -58,13 +58,13 @@ class ApiService extends ChangeNotifier {
 
     try {
       final res = await Dio().post(
-          'https://xpresion.gpsupplychain.com/api/v1/Awbentry/PrintPDF',
+          'https://xpresion.gpsupplychain.com/api/v1/PickupAPI/PickupInscanPrintPDF',
           data: {
-            "AWBNO": awb,
-            "Type": "ms",
-            "UserID": userid,
             "Token": token,
-            "FromWhere": "Mobile",
+            "AWBNo": awb,
+            "UserID": userid,
+            "Location_Name": "",
+            "Events": "Shipment Pickuped1",
           });
       // if (res.data is Map<String, dynamic>) {
       //   ScanResponse scres = ScanResponse.fromJson(res.data);
@@ -79,7 +79,7 @@ class ApiService extends ChangeNotifier {
       if (!context.mounted) return;
       // Printer? pri = await Printing.pickPrinter(context: context);
       // debugPrint(pri.toString());
-      base64ToPdf(scres.response, "test");
+      base64ToPdf(scres.response.response, "test");
       prefs.setString('awbno', '');
     } catch (e) {
       debugPrint("Error: ${e.toString()}");
@@ -128,15 +128,13 @@ class ApiService extends ChangeNotifier {
     final pdf = PdfImageRendererPdf(path: "${output.path}/$fileName.pdf");
     await pdf.open();
     await pdf.openPage(pageIndex: 0);
-    final size = await pdf.getPageSize(pageIndex: 0);
+    // final size = await pdf.getPageSize(pageIndex: 0);
     final img = await pdf.renderPage(
       pageIndex: 0,
       x: 0,
-      y: 15,
-      width: size.width ~/
-          1.5, // you can pass a custom size here to crop the image
-      height:
-          size.height ~/ 3, // you can pass a custom size here to crop the image
+      y: 0,
+      width: 350, // you can pass a custom size here to crop the image
+      height: 700, //~/ 3, // you can pass a custom size here to crop the image
       scale: 2.7, // increase the scale for better quality (e.g. for zooming)
       background: Colors.white,
     );
@@ -154,9 +152,9 @@ class ApiService extends ChangeNotifier {
     await tscCommand.cleanCommand();
     await tscCommand.cls();
     await tscCommand.density(10);
-    await tscCommand.size(width: 1000, height: 900);
+    await tscCommand.size(width: 75, height: 100);
     await tscCommand.image(image: image, x: 0, y: 0);
-    await tscCommand.text(content: "0,0", x: 0, y: 0);
+    // await tscCommand.text(content: "0,0", x: 0, y: 0);
     await tscCommand.print(1);
     final cmd = await tscCommand.getCommand();
     if (cmd == null) return;

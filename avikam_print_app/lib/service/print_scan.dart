@@ -59,67 +59,71 @@ class _BlePrintState extends State<BlePrint> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BluetoothPrintPlus'),
+        title: const Text('Available Devices'),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-                child: StreamBuilder<List<BluetoothDevice>>(
-              stream: _bluetoothPrintPlus.scanResults,
-              initialData: [],
-              builder: (c, snapshot) => ListView(
-                children: snapshot.data!
-                    .map((d) => Container(
-                          padding: const EdgeInsets.only(
-                              left: 10, right: 10, bottom: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                  child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(d.name ?? ''),
-                                  Text(
-                                    d.address ?? 'null',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontSize: 12, color: Colors.grey),
-                                  ),
-                                  const Divider(),
-                                ],
-                              )),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  _bluetoothPrintPlus.connect(d);
-                                  _device = d;
-                                },
-                                child: const Text("connect"),
-                              )
-                            ],
-                          ),
-                        ))
-                    .toList(),
-              ),
-            )),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              width: double.infinity,
-              height: 60,
-              child: ElevatedButton(
-                child: const Text("Search", style: TextStyle(fontSize: 16)),
-                onPressed: () {
-                  _bluetoothPrintPlus.isAvailable;
-                  _bluetoothPrintPlus.startScan(
-                      timeout: const Duration(seconds: 30));
-                },
-              ),
-            )
-          ],
+        child: Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Column(
+            children: [
+              Expanded(
+                  child: StreamBuilder<List<BluetoothDevice>>(
+                stream: _bluetoothPrintPlus.scanResults,
+                initialData: [],
+                builder: (c, snapshot) => ListView(
+                  children: snapshot.data!
+                      .map((d) => Container(
+                            padding: const EdgeInsets.only(
+                                left: 10, right: 10, bottom: 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                    child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(d.name ?? ''),
+                                    Text(
+                                      d.address ?? 'null',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          fontSize: 12, color: Colors.grey),
+                                    ),
+                                    const Divider(),
+                                  ],
+                                )),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    _bluetoothPrintPlus.connect(d);
+                                    _device = d;
+                                  },
+                                  child: const Text("connect"),
+                                )
+                              ],
+                            ),
+                          ))
+                      .toList(),
+                ),
+              )),
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                width: double.infinity,
+                height: 60,
+                child: ElevatedButton(
+                  child: const Text("Search", style: TextStyle(fontSize: 16)),
+                  onPressed: () {
+                    _bluetoothPrintPlus.isAvailable;
+                    _bluetoothPrintPlus.startScan(
+                        timeout: const Duration(seconds: 30));
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
