@@ -25,9 +25,10 @@ class _BarcodeScannerState extends State<BarcodeScanner> {
         Expanded(
           flex: 4,
           child: TextField(
-            // keyboardType: TextInputType.none,
+            // keyboardType: TextInputType.text,
             autofocus: true,
             // showCursor: false,
+            // TODO change function to onChange for deployment
             onChanged: (value) {
               Provider.of<ApiService>(context, listen: false).setAWB(value);
               debugPrint("AWB No.: $value");

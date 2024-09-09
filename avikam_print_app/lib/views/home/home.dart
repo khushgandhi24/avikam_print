@@ -56,6 +56,25 @@ class HomePage extends StatelessWidget {
                   child: BarcodeScanner(),
                 ),
                 SizedBox(height: MediaQuery.sizeOf(context).height * 0.25),
+                Consumer<ApiService>(
+                    builder: (context, value, child) => Container(
+                          alignment: const Alignment(0, 0),
+                          width: MediaQuery.sizeOf(context).width,
+                          height: MediaQuery.sizeOf(context).height * 0.15,
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 2, color: AppColors.secondaryColor),
+                              borderRadius: BorderRadius.circular(36)),
+                          child: (value.awb != "")
+                              ? Text(
+                                  value.awb!,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.primaryColor),
+                                )
+                              : const SizedBox.shrink(),
+                        )),
+                SizedBox(height: MediaQuery.sizeOf(context).height * 0.25),
                 // const LabelPreview(),
                 TextButton(
                     onPressed: () {
