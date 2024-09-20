@@ -228,7 +228,7 @@ class ApiService extends ChangeNotifier {
     await tscCommand.cleanCommand();
     await tscCommand.cls();
     await tscCommand.density(12);
-    await tscCommand.size(width: 75, height: 75);
+    await tscCommand.size(width: 75, height: 70);
     // await tscCommand.gap(1); // Gap causes a fatal exception: main and terminates the app
     await tscCommand.image(image: image, x: 0, y: 0);
     // await tscCommand.text(content: "0,0", x: 0, y: 0);
