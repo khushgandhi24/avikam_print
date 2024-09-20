@@ -210,8 +210,8 @@ class ApiService extends ChangeNotifier {
       x: 0,
       y: 0,
       width: 350, // you can pass a custom size here to crop the image
-      height: 700, //~/ 3, // you can pass a custom size here to crop the image
-      scale: 2.7, // increase the scale for better quality (e.g. for zooming)
+      height: 500, //~/ 3, // you can pass a custom size here to crop the image
+      scale: 2, // increase the scale for better quality (e.g. for zooming)
       background: Colors.white,
     );
     await pdf.closePage(pageIndex: 0);
@@ -227,8 +227,9 @@ class ApiService extends ChangeNotifier {
     final tscCommand = TscCommand();
     await tscCommand.cleanCommand();
     await tscCommand.cls();
-    await tscCommand.density(10);
-    await tscCommand.size(width: 75, height: 100);
+    await tscCommand.density(12);
+    await tscCommand.size(width: 75, height: 75);
+    // await tscCommand.gap(1); // Gap causes a fatal exception: main and terminates the app
     await tscCommand.image(image: image, x: 0, y: 0);
     // await tscCommand.text(content: "0,0", x: 0, y: 0);
     await tscCommand.print(1);

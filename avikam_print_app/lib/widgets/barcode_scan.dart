@@ -26,7 +26,7 @@ class _BarcodeScannerState extends State<BarcodeScanner> {
           flex: 4,
           child: TextField(
             // keyboardType: TextInputType.text,
-            autofocus: true,
+            // autofocus: true,
             // showCursor: false,
             // TODO change function to onChange for deployment
             onChanged: (value) {
