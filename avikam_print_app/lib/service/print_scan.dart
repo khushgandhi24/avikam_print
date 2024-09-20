@@ -1,7 +1,9 @@
+import 'package:avikam_print_app/service/api_service.dart';
 import 'package:avikam_print_app/views/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:bluetooth_print_plus/bluetooth_print_plus.dart';
 import 'package:bluetooth_print_plus/bluetooth_print_model.dart';
+import 'package:provider/provider.dart';
 
 class BlePrint extends StatefulWidget {
   const BlePrint({super.key});
@@ -31,6 +33,7 @@ class _BlePrintState extends State<BlePrint> {
             if (_device == null) return;
             _connected = true;
             _bluetoothPrintPlus.stopScan();
+            Provider.of<ApiService>(context, listen: false).setConnectionStatus(_connected);
             Navigator.of(context)
                 .push(MaterialPageRoute(builder: (ctx) => const HomePage()));
           });

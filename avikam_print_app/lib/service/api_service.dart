@@ -1,6 +1,7 @@
 // import 'package:avikam_print_app/views/auth/log_in.dart';
 // import 'dart:typed_data';
 import 'package:avikam_print_app/views/auth/log_in.dart';
+import 'package:bluetooth_print_plus/bluetooth_print_model.dart';
 import 'package:bluetooth_print_plus/bluetooth_print_plus.dart';
 import 'package:bluetooth_print_plus/tsp_command.dart';
 // import 'package:bluetooth_print_plus/bluetooth_print_model.dart';
@@ -24,6 +25,22 @@ class ApiService extends ChangeNotifier {
   Uint8List? imaeg;
   String? _awb = "";
   String? get awb => _awb;
+  bool? connectionStatus = false;
+
+  void setConnectionStatus (bool status) {
+    connectionStatus = status;
+    notifyListeners();
+  }
+
+  // void checkBluetoothConnection() async {
+  //   // connectionStatus = await _bluetoothPrintPlus.isConnected;
+  //   // return connectionStatus!;
+  //   var connectionStatus1 = BluetoothPrintPlus.instance.isConnected;
+  //   debugPrint("Connection Status: $connectionStatus1");
+  //   connectionStatus = connectionStatus1;
+  //   notifyListeners();
+  //   // return connectionStatus;
+  // }
 
   void setImaeg(Uint8List data) {
     imaeg = data;
@@ -64,8 +81,32 @@ class ApiService extends ChangeNotifier {
     String? userid = prefs.getString('userID');
     String? token = prefs.getString('token');
     String? awb = prefs.getString('awbno');
-
+    // debugPrint(isConnected.toString());
+    // await Future.delayed(const Duration(seconds: 1));
     debugPrint("Call Start");
+    debugPrint("$connectionStatus");
+    if (!(connectionStatus!)) {
+      if (!context.mounted) return;
+      showDialog(
+              context: context,
+              builder: (ctx) {
+                return AlertDialog(
+                  title: const Text('Device not connected to printer'),
+                  content: const Text('Please connect to a printer & try again!'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        setAWB("");
+                        Navigator.pop(ctx);
+                      },
+                      child: const Text('Close'),
+                    ),
+                  ],
+                  actionsAlignment: MainAxisAlignment.center,
+                );
+              });
+      return;
+    }
     if (await checkIsConnected()) {
       try {
         final res = await Dio().post(
@@ -128,6 +169,29 @@ class ApiService extends ChangeNotifier {
                   actionsAlignment: MainAxisAlignment.center,
                 );
               });
+              return;
+        }
+        if (scres.response.response.endsWith("Exists")) {
+          if (!context.mounted) return;
+          showDialog(
+              context: context,
+              builder: (ctx) {
+                return AlertDialog(
+                  title: Text('$awb already scanned & printed'),
+                  content: const Text('Please enter a valid AWB Number!'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        setAWB("");
+                        Navigator.pop(ctx);
+                      },
+                      child: const Text('Close'),
+                    ),
+                  ],
+                  actionsAlignment: MainAxisAlignment.center,
+                );
+              });
+              return;
         }
         // debugPrint(res.data.toString());
         // setbase64(scres.response);

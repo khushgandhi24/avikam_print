@@ -32,6 +32,7 @@ class _BarcodeScannerState extends State<BarcodeScanner> {
             onChanged: (value) {
               Provider.of<ApiService>(context, listen: false).setAWB(value);
               debugPrint("AWB No.: $value");
+              // Provider.of<ApiService>(context, listen: false).checkBluetoothConnection();
               Provider.of<ApiService>(context, listen: false)
                   .getBase64(value.trim(), context);
               barcodeController.clear();
